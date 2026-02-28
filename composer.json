@@ -5,16 +5,20 @@
       }
   ],
   "autoload": {
-      "psr-4": {
-          "Hexlet\\Code\\": "src/"
-      }
+    "psr-4": {
+      "Hexlet\\Code\\": "src/"
+    },
+    "files": [
+      "src/Differ.php"
+    ]
   },
   "bin": ["bin/gendiff"],
   "license": "MIT",
   "minimum-stability": "stable",
   "name": "hexlet/code",
     "require": {
-        "docopt/docopt": "^1.0"
+        "docopt/docopt": "^1.0",
+    "funct/funct": "^1.6"
     },
   "type": "library"
 }

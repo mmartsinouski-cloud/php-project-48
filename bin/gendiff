@@ -4,7 +4,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Docopt\Handler;
-use Hexlet\Code\Parser;
+use function Hexlet\Code\genDiff;
 
 $doc = <<<DOC
 Generate diff
@@ -20,7 +20,7 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOC;
 
-$handler = new Handler();
+$handler = new Handler(['optionsFirst' => true]);
 $result = $handler->handle($doc, array_slice($argv, 1));
 
 if ($result['--help']) {
@@ -36,24 +36,11 @@ if ($result['--version']) {
 if (isset($result['<firstFile>']) && isset($result['<secondFile>'])) {
     $firstFile = $result['<firstFile>'];
     $secondFile = $result['<secondFile>'];
-    $format = $result['--format'] ?? 'stylish';
 
     try {
-        // Парсим файлы
-        $data1 = Parser::parseToArray($firstFile);
-        $data2 = Parser::parseToArray($secondFile);
-
-        // Выводим содержимое для демонстрации
-        echo "Содержимое первого файла:\n";
-        print_r($data1);
-
-        echo "\nСодержимое второго файла:\n";
-        print_r($data2);
-
-        // Здесь будет логика сравнения
-        echo "\nФормат вывода: $format\n";
-
-    } catch (Exception $e) {
+        $diff = genDiff($firstFile, $secondFile);
+        echo $diff . "\n";
+    } catch (\Exception $e) {
         echo "Ошибка: " . $e->getMessage() . "\n";
         exit(1);
     }
