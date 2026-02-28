@@ -6,7 +6,6 @@ use Exception;
 
 class Parser
 {
-
     /**
      * Парсит JSON файл и возвращает ассоциативный массив
      *
