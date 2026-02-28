@@ -4,6 +4,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Docopt\Handler;
+use Hexlet\Code\Parser;
 
 $doc = <<<DOC
 Generate diff
@@ -31,3 +32,35 @@ if ($result['--version']) {
     echo "1.0.0\n";
     exit(0);
 }
+
+if (isset($result['<firstFile>']) && isset($result['<secondFile>'])) {
+    $firstFile = $result['<firstFile>'];
+    $secondFile = $result['<secondFile>'];
+    $format = $result['--format'] ?? 'stylish';
+
+    try {
+        // Парсим файлы
+        $data1 = Parser::parseToArray($firstFile);
+        $data2 = Parser::parseToArray($secondFile);
+
+        // Выводим содержимое для демонстрации
+        echo "Содержимое первого файла:\n";
+        print_r($data1);
+
+        echo "\nСодержимое второго файла:\n";
+        print_r($data2);
+
+        // Здесь будет логика сравнения
+        echo "\nФормат вывода: $format\n";
+
+    } catch (Exception $e) {
+        echo "Ошибка: " . $e->getMessage() . "\n";
+        exit(1);
+    }
+
+    exit(0);
+}
+
+// Если неправильное использование
+echo $doc;
+exit(1);
