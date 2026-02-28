@@ -1,0 +1,20 @@
+{
+  "authors": [
+      {
+          "name": "Martsinouski M"
+      }
+  ],
+  "autoload": {
+      "psr-4": {
+          "Hexlet\\Code\\": "src/"
+      }
+  },
+  "bin": ["bin/gendiff"],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "name": "hexlet/code",
+    "require": {
+        "docopt/docopt": "^1.0"
+    },
+  "type": "library"
+}
