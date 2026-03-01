@@ -96,4 +96,67 @@ class DifferTest extends TestCase
         // Clean up
         unlink($invalidFile);
     }
+
+    public function testGenDiffWithYamlFiles()
+    {
+        $file1 = $this->fixturesDir . '/file1.yml';
+        $file2 = $this->fixturesDir . '/file2.yml';
+
+        $expected = implode("\n", [
+            '{',
+            '  - follow: false',
+            '    host: hexlet.io',
+            '  - proxy: 123.234.53.22',
+            '  - timeout: 50',
+            '  + timeout: 20',
+            '  + verbose: true',
+            '}'
+        ]);
+
+        $this->assertEquals($expected, genDiff($file1, $file2));
+    }
+
+    public function testGenDiffWithMixedFormats()
+    {
+        $file1 = $this->fixturesDir . '/file1.json';
+        $file2 = $this->fixturesDir . '/file2.yml';
+
+        $expected = implode("\n", [
+            '{',
+            '  - follow: false',
+            '    host: hexlet.io',
+            '  - proxy: 123.234.53.22',
+            '  - timeout: 50',
+            '  + timeout: 20',
+            '  + verbose: true',
+            '}'
+        ]);
+
+        $this->assertEquals($expected, genDiff($file1, $file2));
+    }
+
+    public function testGenDiffWithYamlAndDifferentExtensions()
+    {
+        $file1 = $this->fixturesDir . '/file1.yaml'; // .yaml расширение
+        $file2 = $this->fixturesDir . '/file2.yml';  // .yml расширение
+
+        // Создаем копию с другим расширением
+        copy($this->fixturesDir . '/file1.yml', $this->fixturesDir . '/file1.yaml');
+
+        $expected = implode("\n", [
+            '{',
+            '  - follow: false',
+            '    host: hexlet.io',
+            '  - proxy: 123.234.53.22',
+            '  - timeout: 50',
+            '  + timeout: 20',
+            '  + verbose: true',
+            '}'
+        ]);
+
+        $this->assertEquals($expected, genDiff($file1, $file2));
+
+        // Clean up
+        unlink($this->fixturesDir . '/file1.yaml');
+    }
 }

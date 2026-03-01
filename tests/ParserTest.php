@@ -18,7 +18,7 @@ class ParserTest extends TestCase
     public function testParseValidJson()
     {
         $file = $this->fixturesDir . '/file1.json';
-        $result = Parser::parseToArray($file);
+        $result = Parser::parse($file);
 
         $this->assertIsArray($result);
         $this->assertArrayHasKey('host', $result);
@@ -31,7 +31,7 @@ class ParserTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('File not found: nonexistent.json');
 
-        Parser::parseToArray('nonexistent.json');
+        Parser::parse('nonexistent.json');
     }
 
     public function testParseInvalidJson()
@@ -42,7 +42,7 @@ class ParserTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid JSON');
 
-        Parser::parseToArray($invalidFile);
+        Parser::parse($invalidFile);
 
         // Clean up
         unlink($invalidFile);

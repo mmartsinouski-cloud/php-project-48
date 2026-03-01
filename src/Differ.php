@@ -6,34 +6,31 @@ use function Funct\Collection\sortBy;
 
 function genDiff(string $path1, string $path2): string
 {
-    $data1 = Parser::parseToArray($path1);
-    $data2 = Parser::parseToArray($path2);
+    $data1 = Parser::parse($path1);
+    $data2 = Parser::parse($path2);
 
     $allKeys = array_unique(array_merge(array_keys($data1), array_keys($data2)));
 
-    $sortedKeys = sortBy($allKeys, function ($key) {
-        return $key;
-    });
+    $sortedKeys = sortBy($allKeys, fn($key) => $key);
 
-    $lines = array_reduce($sortedKeys, callback: function ($acc, $key) use ($data1, $data2) {
+    $lines = array_reduce($sortedKeys, function ($acc, $key) use ($data1, $data2) {
         $exists1 = array_key_exists($key, $data1);
         $exists2 = array_key_exists($key, $data2);
-        $value1 = $exists1 ? formatValue($data1[$key]) : null;
-        $value2 = $exists2 ? formatValue($data2[$key]) : null;
+
 
         if ($exists1 && $exists2 && $data1[$key] === $data2[$key]) {
-            $acc[] = "    {$key}: {$value1}";
+            $acc[] = "    {$key}: " . formatValue($data1[$key]);
         } elseif ($exists1 && $exists2 && $data1[$key] !== $data2[$key]) {
-            $acc[] = "  - {$key}: {$value1}";
-            $acc[] = "  + {$key}: {$value2}";
-        } elseif ($exists1 && !$exists2) {
-            $acc[] = "  - {$key}: {$value1}";
-        } elseif ($exists2 && !$exists1) {
-            $acc[] = "  + {$key}: {$value2}";
+            $acc[] = "  - {$key}: " . formatValue($data1[$key]);
+            $acc[] = "  + {$key}: " . formatValue($data2[$key]);
+        } elseif ($exists1) {
+            $acc[] = "  - {$key}: " . formatValue($data1[$key]);
+        } else {
+            $acc[] = "  + {$key}: " . formatValue($data2[$key]);
         }
 
         return $acc;
-    }, initial: []);
+    }, []);
 
     return "{\n" . implode("\n", $lines) . "\n}";
 }
