@@ -2,10 +2,8 @@
 
 namespace Hexlet\Code\Tests;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
-
-use function Hexlet\Code\genDiff;
+use function Hexlet\Code\Differ\genDiff;
 
 /**
  * Базовые тесты для функции genDiff с плоскими файлами.
@@ -22,9 +20,6 @@ class DifferTest extends TestCase
         $this->fixturesDir = __DIR__ . '/fixtures/flat';
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithIdenticalFiles()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -43,9 +38,6 @@ class DifferTest extends TestCase
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithDifferentFiles()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -65,9 +57,6 @@ class DifferTest extends TestCase
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithEmptyFile()
     {
         $emptyFile = $this->fixturesDir . '/empty.json';
@@ -111,9 +100,6 @@ class DifferTest extends TestCase
         unlink($invalidFile);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithYamlFiles()
     {
         $file1 = $this->fixturesDir . '/file1.yml';
@@ -132,10 +118,7 @@ class DifferTest extends TestCase
 
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
-
-    /**
-     * @throws Exception
-     */
+    
     public function testGenDiffWithMixedFormats()
     {
         $file1 = $this->fixturesDir . '/file1.json';
