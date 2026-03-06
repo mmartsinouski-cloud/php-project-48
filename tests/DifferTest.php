@@ -92,7 +92,7 @@ class DifferTest extends TestCase
     public function testGenDiffWithInvalidJson()
     {
         $invalidFile = $this->fixturesDir . '/invalid.json';
-        
+
         if (!file_exists($invalidFile)) {
             file_put_contents($invalidFile, '{invalid json}');
         }
