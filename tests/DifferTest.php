@@ -61,7 +61,10 @@ class DifferTest extends TestCase
     public function testGenDiffWithEmptyFile()
     {
         $emptyFile = $this->fixturesDir . '/empty.json';
-        file_put_contents($emptyFile, '{}');
+
+        if (!file_exists($emptyFile)) {
+            file_put_contents($emptyFile, '{}');
+        }
 
         $file2 = $this->fixturesDir . '/file2.json';
 
@@ -76,8 +79,6 @@ class DifferTest extends TestCase
         ]);
 
         $this->assertEquals($expected, genDiff($emptyFile, $file2));
-
-        unlink($emptyFile);
     }
 
     public function testGenDiffWithFileNotFound()
@@ -91,14 +92,16 @@ class DifferTest extends TestCase
     public function testGenDiffWithInvalidJson()
     {
         $invalidFile = $this->fixturesDir . '/invalid.json';
-        file_put_contents($invalidFile, '{invalid json}');
+        
+        if (!file_exists($invalidFile)) {
+            file_put_contents($invalidFile, '{invalid json}');
+        }
+
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid JSON');
 
         genDiff($invalidFile, $this->fixturesDir . '/file1.json');
-
-        unlink($invalidFile);
     }
 
     public function testGenDiffWithYamlFiles()
