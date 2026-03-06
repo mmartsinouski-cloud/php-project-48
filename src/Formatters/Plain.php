@@ -2,8 +2,6 @@
 
 namespace Hexlet\Code\Formatters;
 
-use Exception;
-
 /**
  * Форматирует AST дерево в plain формат.
  *
@@ -15,7 +13,7 @@ class Plain
      *
      * @param array $ast AST дерево различий
      * @return string Текстовое представление изменений
-     * @throws Exception
+     *
      */
     public static function format(array $ast): string
     {
@@ -29,7 +27,7 @@ class Plain
      * @param array $ast Текущий узел AST
      * @param string $path Путь к текущему узлу (для вложенных)
      * @return array
-     * @throws Exception
+     *
      */
     private static function iter(array $ast, string $path): array
     {
@@ -63,7 +61,7 @@ class Plain
                     break;
 
                 default:
-                    throw new Exception("Unknown node type: {$node['type']}");
+                    throw new \Exception("Unknown node type: {$node['type']}");
             }
         }
 

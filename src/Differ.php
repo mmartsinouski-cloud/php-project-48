@@ -2,7 +2,6 @@
 
 namespace Hexlet\Code;
 
-use Exception;
 use Hexlet\Code\Formatters\Stylish;
 use Hexlet\Code\Formatters\Plain;
 use Hexlet\Code\Formatters\Json;
@@ -14,7 +13,7 @@ use Hexlet\Code\Formatters\Json;
  * @param string $path2
  * @param string $format Формат вывода (stylish, plain, json)
  * @return string
- * @throws Exception
+ *
  */
 function genDiff(string $path1, string $path2, string $format = 'stylish'): string
 {
@@ -32,7 +31,7 @@ function genDiff(string $path1, string $path2, string $format = 'stylish'): stri
  * @param array $ast
  * @param string $format
  * @return string Отформатированный вывод
- * @throws Exception Если формат не поддерживается
+ *
  */
 function formatAst(array $ast, string $format): string
 {
@@ -40,6 +39,6 @@ function formatAst(array $ast, string $format): string
         'stylish' => Stylish::format($ast),
         'plain'   => Plain::format($ast),
         'json'    => Json::format($ast),
-        default   => throw new Exception("Unknown format: $format"),
+        default   => throw new \Exception("Unknown format: {$format}"),
     };
 }
