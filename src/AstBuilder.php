@@ -2,6 +2,13 @@
 
 namespace Hexlet\Code;
 
+/**
+ * Строит AST различий между двумя структурами данных.
+ *
+ * Каждый узел дерева содержит ключ, тип изменения и соответствующие значения.
+ * Типы узлов: nested (вложенный), unchanged (без изменений), changed (изменен),
+ * added (добавлен), removed (удален).
+ */
 class AstBuilder
 {
     /**
@@ -74,6 +81,9 @@ class AstBuilder
 
     /**
      * Проверяет, является ли массив ассоциативным
+     *
+     * @param array $array
+     * @return bool
      */
     private static function isAssoc(array $array): bool
     {

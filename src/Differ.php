@@ -2,20 +2,19 @@
 
 namespace Hexlet\Code;
 
+use Exception;
 use Hexlet\Code\Formatters\Stylish;
 use Hexlet\Code\Formatters\Plain;
 use Hexlet\Code\Formatters\Json;
 
-use function Hexlet\Code\AstBuilder;
-
 /**
- * Сравнивает два файла и возвращает разницу в указанном формате
+ * Сравнивает два файла и возвращает разницу в указанном формате.
  *
- * @param string $path1 Путь к первому файлу
- * @param string $path2 Путь ко второму файлу
+ * @param string $path1
+ * @param string $path2
  * @param string $format Формат вывода (stylish, plain, json)
- * @return string Отформатированная разница
- * @throws \Exception Если файл не найден или неподдерживаемый формат
+ * @return string
+ * @throws Exception
  */
 function genDiff(string $path1, string $path2, string $format = 'stylish'): string
 {
@@ -30,10 +29,10 @@ function genDiff(string $path1, string $path2, string $format = 'stylish'): stri
 /**
  * Форматирует AST дерево в указанном формате
  *
- * @param array $ast AST дерево
- * @param string $format Формат вывода
+ * @param array $ast
+ * @param string $format
  * @return string Отформатированный вывод
- * @throws \Exception Если формат не поддерживается
+ * @throws Exception Если формат не поддерживается
  */
 function formatAst(array $ast, string $format): string
 {
@@ -41,6 +40,6 @@ function formatAst(array $ast, string $format): string
         'stylish' => Stylish::format($ast),
         'plain'   => Plain::format($ast),
         'json'    => Json::format($ast),
-        default   => throw new \Exception("Unknown format: {$format}"),
+        default   => throw new Exception("Unknown format: $format"),
     };
 }

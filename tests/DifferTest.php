@@ -2,10 +2,16 @@
 
 namespace Hexlet\Code\Tests;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\genDiff;
 
+/**
+ * Базовые тесты для функции genDiff с плоскими файлами.
+ * Проверяет идентичные файлы, разные файлы, пустые файлы,
+ * обработку ошибок и поддержку различных форматов.
+ */
 class DifferTest extends TestCase
 {
     private string $fixturesDir;
@@ -16,6 +22,9 @@ class DifferTest extends TestCase
         $this->fixturesDir = __DIR__ . '/fixtures/flat';
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenDiffWithIdenticalFiles()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -34,6 +43,9 @@ class DifferTest extends TestCase
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenDiffWithDifferentFiles()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -53,6 +65,9 @@ class DifferTest extends TestCase
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenDiffWithEmptyFile()
     {
         $emptyFile = $this->fixturesDir . '/empty.json';
@@ -77,7 +92,7 @@ class DifferTest extends TestCase
 
     public function testGenDiffWithFileNotFound()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('File not found: nonexistent.json');
 
         genDiff('nonexistent.json', $this->fixturesDir . '/file1.json');
@@ -88,7 +103,7 @@ class DifferTest extends TestCase
         $invalidFile = $this->fixturesDir . '/invalid.json';
         file_put_contents($invalidFile, '{invalid json}');
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid JSON');
 
         genDiff($invalidFile, $this->fixturesDir . '/file1.json');
@@ -96,6 +111,9 @@ class DifferTest extends TestCase
         unlink($invalidFile);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenDiffWithYamlFiles()
     {
         $file1 = $this->fixturesDir . '/file1.yml';
@@ -115,6 +133,9 @@ class DifferTest extends TestCase
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGenDiffWithMixedFormats()
     {
         $file1 = $this->fixturesDir . '/file1.json';
