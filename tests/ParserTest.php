@@ -12,7 +12,7 @@ class ParserTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->fixturesDir = __DIR__ . '/fixtures';
+        $this->fixturesDir = __DIR__ . '/fixtures/flat';
     }
 
     public function testParseValidJson()

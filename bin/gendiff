@@ -37,8 +37,11 @@ if (isset($result['<firstFile>']) && isset($result['<secondFile>'])) {
     $firstFile = $result['<firstFile>'];
     $secondFile = $result['<secondFile>'];
 
+    // Получаем формат из аргументов или используем stylish по умолчанию
+    $format = $result['--format'] ?? 'stylish';
+
     try {
-        $diff = genDiff($firstFile, $secondFile);
+        $diff = genDiff($firstFile, $secondFile, $format);
         echo $diff . "\n";
     } catch (\Exception $e) {
         echo "Ошибка: " . $e->getMessage() . "\n";

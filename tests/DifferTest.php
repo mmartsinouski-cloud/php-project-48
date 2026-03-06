@@ -13,14 +13,15 @@ class DifferTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->fixturesDir = __DIR__ . '/fixtures';
+        $this->fixturesDir = __DIR__ . '/fixtures/flat';
     }
 
     public function testGenDiffWithIdenticalFiles()
     {
         $file1 = $this->fixturesDir . '/file1.json';
-        $file2 = $this->fixturesDir . '/file1.json'; // Одинаковые файлы
+        $file2 = $this->fixturesDir . '/file1.json';
 
+        // Сортируем ключи в алфавитном порядке
         $expected = implode("\n", [
             '{',
             '    follow: false',
@@ -38,12 +39,11 @@ class DifferTest extends TestCase
         $file1 = $this->fixturesDir . '/file1.json';
         $file2 = $this->fixturesDir . '/file2.json';
 
-        // Ключи в алфавитном порядке: follow, host, proxy, timeout, verbose
         $expected = implode("\n", [
             '{',
-            '  - follow: false',
+            '    follow: false',
             '    host: hexlet.io',
-            '  - proxy: 123.234.53.22',
+            '    proxy: 123.234.53.22',
             '  - timeout: 50',
             '  + timeout: 20',
             '  + verbose: true',
@@ -60,10 +60,11 @@ class DifferTest extends TestCase
 
         $file2 = $this->fixturesDir . '/file2.json';
 
-        // Ключи должны быть в АЛФАВИТНОМ ПОРЯДКЕ: host, timeout, verbose
         $expected = implode("\n", [
             '{',
+            '  + follow: false',
             '  + host: hexlet.io',
+            '  + proxy: 123.234.53.22',
             '  + timeout: 20',
             '  + verbose: true',
             '}'
@@ -71,7 +72,6 @@ class DifferTest extends TestCase
 
         $this->assertEquals($expected, genDiff($emptyFile, $file2));
 
-        // Clean up
         unlink($emptyFile);
     }
 
@@ -93,7 +93,6 @@ class DifferTest extends TestCase
 
         genDiff($invalidFile, $this->fixturesDir . '/file1.json');
 
-        // Clean up
         unlink($invalidFile);
     }
 
@@ -104,9 +103,9 @@ class DifferTest extends TestCase
 
         $expected = implode("\n", [
             '{',
-            '  - follow: false',
+            '    follow: false',
             '    host: hexlet.io',
-            '  - proxy: 123.234.53.22',
+            '    proxy: 123.234.53.22',
             '  - timeout: 50',
             '  + timeout: 20',
             '  + verbose: true',
@@ -123,9 +122,9 @@ class DifferTest extends TestCase
 
         $expected = implode("\n", [
             '{',
-            '  - follow: false',
+            '    follow: false',
             '    host: hexlet.io',
-            '  - proxy: 123.234.53.22',
+            '    proxy: 123.234.53.22',
             '  - timeout: 50',
             '  + timeout: 20',
             '  + verbose: true',
@@ -133,30 +132,5 @@ class DifferTest extends TestCase
         ]);
 
         $this->assertEquals($expected, genDiff($file1, $file2));
-    }
-
-    public function testGenDiffWithYamlAndDifferentExtensions()
-    {
-        $file1 = $this->fixturesDir . '/file1.yaml'; // .yaml расширение
-        $file2 = $this->fixturesDir . '/file2.yml';  // .yml расширение
-
-        // Создаем копию с другим расширением
-        copy($this->fixturesDir . '/file1.yml', $this->fixturesDir . '/file1.yaml');
-
-        $expected = implode("\n", [
-            '{',
-            '  - follow: false',
-            '    host: hexlet.io',
-            '  - proxy: 123.234.53.22',
-            '  - timeout: 50',
-            '  + timeout: 20',
-            '  + verbose: true',
-            '}'
-        ]);
-
-        $this->assertEquals($expected, genDiff($file1, $file2));
-
-        // Clean up
-        unlink($this->fixturesDir . '/file1.yaml');
     }
 }

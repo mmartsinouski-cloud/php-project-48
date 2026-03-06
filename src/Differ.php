@@ -1,47 +1,46 @@
 <?php
 
-namespace  Hexlet\Code;
+namespace Hexlet\Code;
 
-use function Funct\Collection\sortBy;
+use Hexlet\Code\Formatters\Stylish;
+use Hexlet\Code\Formatters\Plain;
+use Hexlet\Code\Formatters\Json;
 
-function genDiff(string $path1, string $path2): string
+use function Hexlet\Code\AstBuilder;
+
+/**
+ * Сравнивает два файла и возвращает разницу в указанном формате
+ *
+ * @param string $path1 Путь к первому файлу
+ * @param string $path2 Путь ко второму файлу
+ * @param string $format Формат вывода (stylish, plain, json)
+ * @return string Отформатированная разница
+ * @throws \Exception Если файл не найден или неподдерживаемый формат
+ */
+function genDiff(string $path1, string $path2, string $format = 'stylish'): string
 {
     $data1 = Parser::parse($path1);
     $data2 = Parser::parse($path2);
 
-    $allKeys = array_unique(array_merge(array_keys($data1), array_keys($data2)));
+    $ast = AstBuilder::build($data1, $data2);
 
-    $sortedKeys = sortBy($allKeys, fn($key) => $key);
-
-    $lines = array_reduce($sortedKeys, function ($acc, $key) use ($data1, $data2) {
-        $exists1 = array_key_exists($key, $data1);
-        $exists2 = array_key_exists($key, $data2);
-
-
-        if ($exists1 && $exists2 && $data1[$key] === $data2[$key]) {
-            $acc[] = "    {$key}: " . formatValue($data1[$key]);
-        } elseif ($exists1 && $exists2 && $data1[$key] !== $data2[$key]) {
-            $acc[] = "  - {$key}: " . formatValue($data1[$key]);
-            $acc[] = "  + {$key}: " . formatValue($data2[$key]);
-        } elseif ($exists1) {
-            $acc[] = "  - {$key}: " . formatValue($data1[$key]);
-        } else {
-            $acc[] = "  + {$key}: " . formatValue($data2[$key]);
-        }
-
-        return $acc;
-    }, []);
-
-    return "{\n" . implode("\n", $lines) . "\n}";
+    return formatAst($ast, $format);
 }
 
-function formatValue($value)
+/**
+ * Форматирует AST дерево в указанном формате
+ *
+ * @param array $ast AST дерево
+ * @param string $format Формат вывода
+ * @return string Отформатированный вывод
+ * @throws \Exception Если формат не поддерживается
+ */
+function formatAst(array $ast, string $format): string
 {
-    if (is_bool($value)) {
-        return $value ? 'true' : 'false';
-    }
-    if (is_null($value)) {
-        return 'null';
-    }
-    return $value;
+    return match ($format) {
+        'stylish' => Stylish::format($ast),
+        'plain'   => Plain::format($ast),
+        'json'    => Json::format($ast),
+        default   => throw new \Exception("Unknown format: {$format}"),
+    };
 }
