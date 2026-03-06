@@ -3,6 +3,7 @@
 namespace Hexlet\Code\Tests;
 
 use PHPUnit\Framework\TestCase;
+
 use function Hexlet\Code\Differ\genDiff;
 
 /**
@@ -118,7 +119,7 @@ class DifferTest extends TestCase
 
         $this->assertEquals($expected, genDiff($file1, $file2));
     }
-    
+
     public function testGenDiffWithMixedFormats()
     {
         $file1 = $this->fixturesDir . '/file1.json';
