@@ -82,7 +82,7 @@ class DifferTest extends TestCase
 
     public function testGenDiffWithFileNotFound()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('File not found: nonexistent.json');
 
         genDiff('nonexistent.json', $this->fixturesDir . '/file1.json');
@@ -93,7 +93,7 @@ class DifferTest extends TestCase
         $invalidFile = $this->fixturesDir . '/invalid.json';
         file_put_contents($invalidFile, '{invalid json}');
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid JSON');
 
         genDiff($invalidFile, $this->fixturesDir . '/file1.json');

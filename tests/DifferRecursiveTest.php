@@ -2,7 +2,6 @@
 
 namespace Hexlet\Code\Tests;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\genDiff;
@@ -21,9 +20,6 @@ class DifferRecursiveTest extends TestCase
         $this->fixturesDir = __DIR__ . '/fixtures/recursive';
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithRecursiveJson()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -38,9 +34,6 @@ class DifferRecursiveTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithRecursiveYaml()
     {
         $file1 = $this->fixturesDir . '/file1.yml';
@@ -55,9 +48,6 @@ class DifferRecursiveTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffWithMixedRecursiveFormats()
     {
         $file1 = $this->fixturesDir . '/file1.json';

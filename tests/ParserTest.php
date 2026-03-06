@@ -2,7 +2,6 @@
 
 namespace Hexlet\Code\Tests;
 
-use Exception;
 use Hexlet\Code\Parser;
 use PHPUnit\Framework\TestCase;
 
@@ -20,9 +19,6 @@ class ParserTest extends TestCase
         $this->fixturesDir = __DIR__ . '/fixtures/flat';
     }
 
-    /**
-     * @throws Exception
-     */
     public function testParseValidJson()
     {
         $file = $this->fixturesDir . '/file1.json';
@@ -36,7 +32,7 @@ class ParserTest extends TestCase
 
     public function testParseFileNotFound()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('File not found: nonexistent.json');
 
         Parser::parse('nonexistent.json');
@@ -47,7 +43,7 @@ class ParserTest extends TestCase
         $invalidFile = $this->fixturesDir . '/invalid.json';
         file_put_contents($invalidFile, '{invalid json}');
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid JSON');
 
         Parser::parse($invalidFile);

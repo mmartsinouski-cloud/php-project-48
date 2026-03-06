@@ -2,7 +2,6 @@
 
 namespace Hexlet\Code\Tests;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\genDiff;
@@ -26,9 +25,6 @@ class DifferPlainTest extends TestCase
         return str_replace("\r\n", "\n", trim($str));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffPlainWithRecursiveJson()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -56,9 +52,6 @@ class DifferPlainTest extends TestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffPlainWithRecursiveYaml()
     {
         $file1 = $this->fixturesDir . '/file1.yml';
@@ -86,9 +79,6 @@ class DifferPlainTest extends TestCase
         );
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffPlainWithFlatFiles()
     {
         $flatDir = __DIR__ . '/fixtures/flat';
@@ -111,9 +101,6 @@ class DifferPlainTest extends TestCase
         $this->assertEquals($expectedLines, $actualLines);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffPlainWithEmptyFile()
     {
         $flatDir = __DIR__ . '/fixtures/flat';

@@ -2,7 +2,6 @@
 
 namespace Hexlet\Code\Tests;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\genDiff;
@@ -21,9 +20,6 @@ class DifferJsonTest extends TestCase
         $this->fixturesDir = __DIR__ . '/fixtures/recursive';
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffJsonWithRecursiveJson()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -46,9 +42,6 @@ class DifferJsonTest extends TestCase
         $this->assertContains('group3', $keys);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffJsonWithRecursiveYaml()
     {
         $file1 = $this->fixturesDir . '/file1.yml';
@@ -61,9 +54,6 @@ class DifferJsonTest extends TestCase
         $this->assertIsArray($data);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffJsonWithMixedFormats()
     {
         $file1 = $this->fixturesDir . '/file1.json';
@@ -76,9 +66,6 @@ class DifferJsonTest extends TestCase
         $this->assertIsArray($data);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffJsonWithFlatFiles()
     {
         $flatDir = __DIR__ . '/fixtures/flat';
@@ -97,9 +84,6 @@ class DifferJsonTest extends TestCase
         $this->assertContains('verbose', $keys);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testGenDiffJsonWithEmptyFile()
     {
         $flatDir = __DIR__ . '/fixtures/flat';
