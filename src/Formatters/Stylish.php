@@ -77,8 +77,8 @@ class Stylish
 
         // Индексированный массив (не ассоциативный)
         $indent = str_repeat(' ', $depth * self::INDENT_SIZE);
-        $items = array_map(function ($item) use ($indent) {
-            return $indent . self::stringify($item, $depth + 1);
+        $items = array_map(function ($item) use ($indent, $depth) {
+            return $indent . $this->stringify($item, $depth + 1);
         }, $value);
 
         return "[\n" . implode("\n", $items) . "\n" . str_repeat(' ', ($depth - 1) * self::INDENT_SIZE) . ']';
