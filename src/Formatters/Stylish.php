@@ -12,8 +12,8 @@ namespace Hexlet\Code\Formatters;
  */
 class Stylish
 {
-    private const int INDENT_SIZE = 4;
-    private const int OFFSET = 2;
+    private const INDENT_SIZE = 4;
+    private const OFFSET = 2;
 
     /**
      * Преобразует AST в stylish.
