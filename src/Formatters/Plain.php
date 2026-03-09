@@ -50,13 +50,6 @@ class Plain
                     $newValue = self::stringify($node['newValue']);
                     $lines[] = "Property '{$currentPath}' was updated. From {$oldValue} to {$newValue}";
                     break;
-
-                case 'unchanged':
-                    // Ничего не добавляем
-                    break;
-
-                default:
-                    throw new \Exception("Unknown node type: {$node['type']}");
             }
         }
 
@@ -69,7 +62,7 @@ class Plain
      * @param mixed $value Значение для преобразования
      * @return string Строковое представление значения
      */
-    private static function stringify(mixed $value): string
+    private static function stringify($value): string
     {
         if (is_array($value)) {
             return '[complex value]';
@@ -85,10 +78,6 @@ class Plain
 
         if (is_string($value)) {
             return "'{$value}'";
-        }
-
-        if (is_numeric($value)) {
-            return (string)$value;
         }
 
         return (string)$value;

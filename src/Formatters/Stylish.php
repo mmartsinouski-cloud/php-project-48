@@ -5,7 +5,6 @@ namespace Hexlet\Code\Formatters;
 class Stylish
 {
     private const INDENT_SIZE = 4;
-    private const OFFSET = 2;
 
     /**
      * Форматирует AST дерево в stylish формат
@@ -15,8 +14,7 @@ class Stylish
      */
     public static function format(array $ast): string
     {
-        $result = self::iter($ast, 1);
-        return "{\n" . $result . '}';
+        return "{\n" . self::iter($ast, 0) . "\n}";
     }
 
     /**
@@ -28,40 +26,38 @@ class Stylish
      */
     private static function iter(array $ast, int $depth): string
     {
-        $lines = [];
-        $currentIndent = str_repeat(' ', $depth * self::INDENT_SIZE - self::OFFSET);
-        $bracketIndent = str_repeat(' ', ($depth - 1) * self::INDENT_SIZE);
+        $indentSize = ($depth + 1) * self::INDENT_SIZE;
+        $mainIndent = str_repeat(' ', $indentSize); // 4, 8, 12...
+        $signIndent = str_repeat(' ', $indentSize - 2); // 2, 6, 10...
 
-        foreach ($ast as $node) {
-            $type = $node['type'];
+        $lines = array_map(function ($node) use ($depth, $mainIndent, $signIndent) {
             $key = $node['key'];
 
-            switch ($type) {
+            switch ($node['type']) {
                 case 'nested':
                     $children = self::iter($node['children'], $depth + 1);
-                    $lines[] = "{$currentIndent}  {$key}: {\n{$children}{$bracketIndent}  }";
-                    break;
+                    return "{$mainIndent}{$key}: {\n{$children}\n{$mainIndent}}";
 
                 case 'unchanged':
-                    $lines[] = "{$currentIndent}  {$key}: " . self::stringify($node['value'], $depth + 1);
-                    break;
-
-                case 'changed':
-                    $lines[] = "{$currentIndent}- {$key}: " . self::stringify($node['oldValue'], $depth + 1);
-                    $lines[] = "{$currentIndent}+ {$key}: " . self::stringify($node['newValue'], $depth + 1);
-                    break;
+                    return "{$mainIndent}{$key}: " . self::stringify($node['value'], $depth + 1);
 
                 case 'added':
-                    $lines[] = "{$currentIndent}+ {$key}: " . self::stringify($node['value'], $depth + 1);
-                    break;
+                    return "{$signIndent}+ {$key}: " . self::stringify($node['value'], $depth + 1);
 
                 case 'removed':
-                    $lines[] = "{$currentIndent}- {$key}: " . self::stringify($node['value'], $depth + 1);
-                    break;
-            }
-        }
+                    return "{$signIndent}- {$key}: " . self::stringify($node['value'], $depth + 1);
 
-        return implode("\n", $lines) . "\n";
+                case 'changed':
+                    $line1 = "{$signIndent}- {$key}: " . self::stringify($node['oldValue'], $depth + 1);
+                    $line2 = "{$signIndent}+ {$key}: " . self::stringify($node['newValue'], $depth + 1);
+                    return "{$line1}\n{$line2}";
+
+                default:
+                    throw new \Exception("Unknown node type: {$node['type']}");
+            }
+        }, $ast);
+
+        return implode("\n", $lines);
     }
 
     /**
@@ -73,80 +69,29 @@ class Stylish
      */
     private static function stringify(mixed $value, int $depth): string
     {
-        if ($value === null) {
-            return 'null';
-        }
-
-        if (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-
         if (!is_array($value)) {
+            if ($value === null) {
+                return 'null';
+            }
+            if (is_bool($value)) {
+                return $value ? 'true' : 'false';
+            }
             return (string)$value;
         }
 
-        // Для пустого массива
-        if (empty($value)) {
-            return '{}';
-        }
+        $indentSize = $depth * self::INDENT_SIZE;
+        $currentIndent = str_repeat(' ', $indentSize + self::INDENT_SIZE);
+        $bracketIndent = str_repeat(' ', $indentSize);
 
-        // Проверяем, ассоциативный ли массив
-        if (self::isAssoc($value)) {
-            return self::stringifyAssocArray($value, $depth);
-        }
+        $lines = array_map(
+            function ($key, $val) use ($depth, $currentIndent) {
+            // Добавил $currentIndent в use
+                return "{$currentIndent}{$key}: " . self::stringify($val, $depth + 1);
+            },
+            array_keys($value),
+            $value
+        );
 
-        // Индексированный массив
-        return self::stringifyIndexedArray($value, $depth);
-    }
-
-    /**
-     * Проверяет, является ли массив ассоциативным
-     *
-     * @param array $array Массив для проверки
-     * @return bool true если массив ассоциативный, false если индексированный
-     */
-    private static function isAssoc(array $array): bool
-    {
-        return array_keys($array) !== range(0, count($array) - 1);
-    }
-
-    /**
-     * Преобразует ассоциативный массив в строковое представление
-     *
-     * @param array $array Ассоциативный массив
-     * @param int $depth Текущая глубина вложенности
-     * @return string Строковое представление массива
-     */
-    private static function stringifyAssocArray(array $array, int $depth): string
-    {
-        $indent = str_repeat(' ', $depth * self::INDENT_SIZE);
-        $bracketIndent = str_repeat(' ', ($depth - 1) * self::INDENT_SIZE);
-
-        $lines = [];
-        foreach ($array as $key => $value) {
-            $lines[] = $indent . $key . ': ' . self::stringify($value, $depth + 1);
-        }
-
-        return "{\n" . implode("\n", $lines) . "\n" . $bracketIndent . '}';
-    }
-
-    /**
-     * Преобразует индексированный массив в строковое представление
-     *
-     * @param array $array Индексированный массив
-     * @param int $depth Текущая глубина вложенности
-     * @return string
-     */
-    private static function stringifyIndexedArray(array $array, int $depth): string
-    {
-        $indent = str_repeat(' ', $depth * self::INDENT_SIZE);
-        $bracketIndent = str_repeat(' ', ($depth - 1) * self::INDENT_SIZE);
-
-        $lines = [];
-        foreach ($array as $value) {
-            $lines[] = $indent . self::stringify($value, $depth + 1);
-        }
-
-        return "[\n" . implode("\n", $lines) . "\n" . $bracketIndent . ']';
+        return "{\n" . implode("\n", $lines) . "\n{$bracketIndent}}";
     }
 }
