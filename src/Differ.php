@@ -11,11 +11,10 @@ use Hexlet\Code\Parser;
 /**
  * Сравнивает два файла и возвращает разницу в указанном формате
  *
- * @param string $path1 Путь к первому файлу
- * @param string $path2 Путь ко второму файлу
- * @param string $format Формат вывода (stylish, plain, json)
- * @return string Отформатированная разница
- * @throws \Exception Если файл не найден или неподдерживаемый формат
+ * @param string $path1
+ * @param string $path2
+ * @param string $format
+ * @return string
  */
 function genDiff(string $path1, string $path2, string $format = 'stylish'): string
 {
@@ -31,8 +30,8 @@ function genDiff(string $path1, string $path2, string $format = 'stylish'): stri
  * Форматирует AST дерево в указанном формате
  *
  * @param array $ast AST дерево
- * @param string $format Формат вывода
- * @return string Отформатированный вывод
+ * @param string $format
+ * @return string
  */
 function formatAst(array $ast, string $format): string
 {

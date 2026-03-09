@@ -74,6 +74,9 @@ class AstBuilder
 
     /**
      * Проверяет, является ли массив ассоциативным
+     *
+     * @param array $array
+     * @return bool true если массив ассоциативный, false если индексированный
      */
     private static function isAssoc(array $array): bool
     {

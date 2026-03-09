@@ -7,12 +7,25 @@ class Stylish
     private const INDENT_SIZE = 4;
     private const OFFSET = 2;
 
+    /**
+     * Форматирует AST дерево в stylish формат
+     *
+     * @param array $ast AST дерево
+     * @return string Отформатированный stylish текст
+     */
     public static function format(array $ast): string
     {
         $result = self::iter($ast, 1);
         return "{\n" . $result . '}';
     }
 
+    /**
+     * Рекурсивно обходит AST дерево и формирует строки stylish формата
+     *
+     * @param array $ast Текущий узел AST дерева
+     * @param int $depth Текущая глубина вложенности
+     * @return string Отформатированный текст для текущего уровня
+     */
     private static function iter(array $ast, int $depth): string
     {
         $lines = [];
@@ -51,7 +64,14 @@ class Stylish
         return implode("\n", $lines) . "\n";
     }
 
-    private static function stringify($value, int $depth): string
+    /**
+     * Преобразует значение в строковое представление для stylish формата
+     *
+     * @param mixed $value Значение для преобразования
+     * @param int $depth Текущая глубина вложенности
+     * @return string Строковое представление значения
+     */
+    private static function stringify(mixed $value, int $depth): string
     {
         if ($value === null) {
             return 'null';
@@ -79,11 +99,24 @@ class Stylish
         return self::stringifyIndexedArray($value, $depth);
     }
 
+    /**
+     * Проверяет, является ли массив ассоциативным
+     *
+     * @param array $array Массив для проверки
+     * @return bool true если массив ассоциативный, false если индексированный
+     */
     private static function isAssoc(array $array): bool
     {
         return array_keys($array) !== range(0, count($array) - 1);
     }
 
+    /**
+     * Преобразует ассоциативный массив в строковое представление
+     *
+     * @param array $array Ассоциативный массив
+     * @param int $depth Текущая глубина вложенности
+     * @return string Строковое представление массива
+     */
     private static function stringifyAssocArray(array $array, int $depth): string
     {
         $indent = str_repeat(' ', $depth * self::INDENT_SIZE);
@@ -97,6 +130,13 @@ class Stylish
         return "{\n" . implode("\n", $lines) . "\n" . $bracketIndent . '}';
     }
 
+    /**
+     * Преобразует индексированный массив в строковое представление
+     *
+     * @param array $array Индексированный массив
+     * @param int $depth Текущая глубина вложенности
+     * @return string
+     */
     private static function stringifyIndexedArray(array $array, int $depth): string
     {
         $indent = str_repeat(' ', $depth * self::INDENT_SIZE);

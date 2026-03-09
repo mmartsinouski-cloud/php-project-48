@@ -7,7 +7,10 @@ use Symfony\Component\Yaml\Yaml;
 class Parser
 {
     /**
-     * Парсит файл (JSON или YAML) в ассоциативный массив
+     * Парсит файл JSON или YAML в ассоциативный массив
+     *
+     * @param string $filepath
+     * @return array Ассоциативный массив
      */
     public static function parse($filepath): array
     {
@@ -22,7 +25,11 @@ class Parser
     }
 
     /**
-     * Логика парсинга в зависимости от формата
+     * Парсит содержимое файла в зависимости от его формата
+     *
+     * @param string $content
+     * @param string $extension
+     * @return array Ассоциативный массив
      */
     private static function parseContent(string $content, string $extension): array
     {

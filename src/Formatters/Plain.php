@@ -4,12 +4,25 @@ namespace Hexlet\Code\Formatters;
 
 class Plain
 {
+    /**
+     * Форматирует AST дерево в plain текстовый формат
+     *
+     * @param array $ast AST дерево
+     * @return string Отформатированный plain текст
+     */
     public static function format(array $ast): string
     {
         $lines = self::iter($ast, '');
         return implode("\n", $lines);
     }
 
+    /**
+     * Рекурсивно обходит AST дерево и формирует строки plain формата
+     *
+     * @param array $ast Текущий узел AST дерева
+     * @param string $path Путь к текущему узлу (для вложенных свойств)
+     * @return array Массив строк для вывода
+     */
     private static function iter(array $ast, string $path): array
     {
         $lines = [];
@@ -50,7 +63,13 @@ class Plain
         return $lines;
     }
 
-    private static function stringify($value): string
+    /**
+     * Преобразует значение в строковое представление для plain формата
+     *
+     * @param mixed $value Значение для преобразования
+     * @return string Строковое представление значения
+     */
+    private static function stringify(mixed $value): string
     {
         if (is_array($value)) {
             return '[complex value]';
