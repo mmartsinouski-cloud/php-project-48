@@ -21,7 +21,6 @@ class DifferTest extends TestCase
         $file1 = $this->fixturesDir . '/file1.json';
         $file2 = $this->fixturesDir . '/file1.json';
 
-        // Сортируем ключи в алфавитном порядке
         $expected = implode("\n", [
             '{',
             '    follow: false',
@@ -56,9 +55,10 @@ class DifferTest extends TestCase
     public function testGenDiffWithEmptyFile()
     {
         $emptyFile = $this->fixturesDir . '/empty.json';
-        file_put_contents($emptyFile, '{}');
-
         $file2 = $this->fixturesDir . '/file2.json';
+
+        // Проверяем, что файл существует
+        $this->assertFileExists($emptyFile, "Empty file not found: {$emptyFile}");
 
         $expected = implode("\n", [
             '{',
@@ -71,8 +71,6 @@ class DifferTest extends TestCase
         ]);
 
         $this->assertEquals($expected, genDiff($emptyFile, $file2));
-
-        unlink($emptyFile);
     }
 
     public function testGenDiffWithFileNotFound()
@@ -86,20 +84,30 @@ class DifferTest extends TestCase
     public function testGenDiffWithInvalidJson()
     {
         $invalidFile = $this->fixturesDir . '/invalid.json';
+
+        // Создаем временный файл с некорректным JSON
         file_put_contents($invalidFile, '{invalid json}');
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid JSON');
 
-        genDiff($invalidFile, $this->fixturesDir . '/file1.json');
-
-        unlink($invalidFile);
+        try {
+            genDiff($invalidFile, $this->fixturesDir . '/file1.json');
+        } finally {
+            // Удаляем временный файл в любом случае
+            if (file_exists($invalidFile)) {
+                unlink($invalidFile);
+            }
+        }
     }
 
     public function testGenDiffWithYamlFiles()
     {
         $file1 = $this->fixturesDir . '/file1.yml';
         $file2 = $this->fixturesDir . '/file2.yml';
+
+        $this->assertFileExists($file1, "YAML file not found: {$file1}");
+        $this->assertFileExists($file2, "YAML file not found: {$file2}");
 
         $expected = implode("\n", [
             '{',
@@ -119,6 +127,9 @@ class DifferTest extends TestCase
     {
         $file1 = $this->fixturesDir . '/file1.json';
         $file2 = $this->fixturesDir . '/file2.yml';
+
+        $this->assertFileExists($file1, "JSON file not found: {$file1}");
+        $this->assertFileExists($file2, "YAML file not found: {$file2}");
 
         $expected = implode("\n", [
             '{',
