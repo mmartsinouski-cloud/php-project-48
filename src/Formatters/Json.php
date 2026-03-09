@@ -12,6 +12,12 @@ class Json
      */
     public static function format(array $ast): string
     {
-        return json_encode($ast, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $result = json_encode($ast, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        if ($result === false) {
+            throw new \RuntimeException('Ошибка кодирования JSON: ' . json_last_error_msg());
+        }
+
+        return $result;
     }
 }

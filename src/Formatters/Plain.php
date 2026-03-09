@@ -29,7 +29,7 @@ class Plain
 
         foreach ($ast as $node) {
             $key = $node['key'];
-            $currentPath = $path ? "{$path}.{$key}" : $key;
+            $currentPath = $path !== '' ? "{$path}.{$key}" : $key;
 
             switch ($node['type']) {
                 case 'nested':
@@ -62,7 +62,7 @@ class Plain
      * @param mixed $value Значение для преобразования
      * @return string Строковое представление значения
      */
-    private static function stringify($value): string
+    private static function stringify(mixed $value): string
     {
         if (is_array($value)) {
             return '[complex value]';
