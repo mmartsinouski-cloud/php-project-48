@@ -6,10 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\genDiff;
 
-/**
- * Тесты для plain форматера.
- *
- */
 class DifferPlainTest extends TestCase
 {
     private string $fixturesDir;

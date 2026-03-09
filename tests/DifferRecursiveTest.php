@@ -6,10 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 use function Hexlet\Code\genDiff;
 
-/**
- * Тесты для рекурсивного сравнения вложенных структур.
- *
- */
 class DifferRecursiveTest extends TestCase
 {
     private string $fixturesDir;

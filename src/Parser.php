@@ -2,23 +2,15 @@
 
 namespace Hexlet\Code;
 
+use Exception;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Читает и парсит файлы различных форматов.
- *
- * JSON, YAML
- */
 class Parser
 {
     /**
-     * Читает файл по указанному пути и парсит его содержимое.
-     *
-     * @param string $filepath
-     * @return array Ассоциативный массив с данными
-     *
+     * Парсит файл (JSON или YAML) в ассоциативный массив
      */
-    public static function parse(string $filepath): array
+    public static function parse($filepath): array
     {
         if (!file_exists($filepath)) {
             throw new \Exception("File not found: {$filepath}");
@@ -32,11 +24,6 @@ class Parser
 
     /**
      * Логика парсинга в зависимости от формата
-     *
-     * @param string $content
-     * @param string $extension Расширение файла
-     * @return array
-     *
      */
     private static function parseContent(string $content, string $extension): array
     {

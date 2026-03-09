@@ -5,10 +5,6 @@ namespace Hexlet\Code\Tests;
 use Hexlet\Code\Parser;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Тесты для класса Parser.
- *
- */
 class ParserTest extends TestCase
 {
     private string $fixturesDir;
