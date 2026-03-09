@@ -1,12 +1,12 @@
 <?php
 
-namespace Hexlet\Code;
+namespace Differ\Differ;
 
 use Hexlet\Code\Formatters\Stylish;
 use Hexlet\Code\Formatters\Plain;
 use Hexlet\Code\Formatters\Json;
-
-use function Hexlet\Code\AstBuilder;
+use Hexlet\Code\AstBuilder;
+use Hexlet\Code\Parser;
 
 /**
  * Сравнивает два файла и возвращает разницу в указанном формате
@@ -33,7 +33,6 @@ function genDiff(string $path1, string $path2, string $format = 'stylish'): stri
  * @param array $ast AST дерево
  * @param string $format Формат вывода
  * @return string Отформатированный вывод
- * @throws \Exception Если формат не поддерживается
  */
 function formatAst(array $ast, string $format): string
 {

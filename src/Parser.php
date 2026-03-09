@@ -2,7 +2,6 @@
 
 namespace Hexlet\Code;
 
-use Exception;
 use Symfony\Component\Yaml\Yaml;
 
 class Parser

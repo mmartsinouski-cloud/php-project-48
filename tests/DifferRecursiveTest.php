@@ -4,7 +4,7 @@ namespace Hexlet\Code\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Hexlet\Code\genDiff;
+use function Differ\Differ\genDiff;
 
 class DifferRecursiveTest extends TestCase
 {
