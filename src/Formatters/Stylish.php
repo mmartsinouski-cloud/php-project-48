@@ -67,21 +67,21 @@ class Stylish
 
         // Для пустого массива
         if (empty($value)) {
-            return '[ {} ]';
+            return '{}';
         }
 
         // Проверяем, ассоциативный ли массив
-        if (array_keys($value) !== range(0, count($value) - 1)) {
+        if (self::isAssoc($value)) {
             return self::stringifyAssocArray($value, $depth);
         }
 
-        // Индексированный массив (не ассоциативный)
-        $indent = str_repeat(' ', $depth * self::INDENT_SIZE);
-        $items = array_map(function ($item) use ($indent, $depth) {
-            return $indent . $this->stringify($item, $depth + 1);
-        }, $value);
+        // Индексированный массив
+        return self::stringifyIndexedArray($value, $depth);
+    }
 
-        return "[\n" . implode("\n", $items) . "\n" . str_repeat(' ', ($depth - 1) * self::INDENT_SIZE) . ']';
+    private static function isAssoc(array $array): bool
+    {
+        return array_keys($array) !== range(0, count($array) - 1);
     }
 
     private static function stringifyAssocArray(array $array, int $depth): string
@@ -91,9 +91,22 @@ class Stylish
 
         $lines = [];
         foreach ($array as $key => $value) {
-            $lines[] = $indent . "{$key}: " . self::stringify($value, $depth + 1);
+            $lines[] = $indent . $key . ': ' . self::stringify($value, $depth + 1);
         }
 
         return "{\n" . implode("\n", $lines) . "\n" . $bracketIndent . '}';
+    }
+
+    private static function stringifyIndexedArray(array $array, int $depth): string
+    {
+        $indent = str_repeat(' ', $depth * self::INDENT_SIZE);
+        $bracketIndent = str_repeat(' ', ($depth - 1) * self::INDENT_SIZE);
+
+        $lines = [];
+        foreach ($array as $value) {
+            $lines[] = $indent . self::stringify($value, $depth + 1);
+        }
+
+        return "[\n" . implode("\n", $lines) . "\n" . $bracketIndent . ']';
     }
 }
