@@ -4,7 +4,7 @@ namespace Hexlet\Code\Formatters;
 
 class Stylish
 {
-    private const int INDENT_SIZE = 4;
+    private const INDENT_SIZE = 4;
 
     /**
      * Форматирует AST дерево в stylish формат
